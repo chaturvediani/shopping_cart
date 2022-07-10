@@ -9,7 +9,10 @@ export default function Register() {
  const navigate=useNavigate();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  
+  const[place,setPlace]=useState("");
+  const [address, setAddress] = useState("");
+  const[id,setId]=useState(null);
+  const[pro_id,setPro_id]=useState(null);
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
   const [error,setError]=useState(false)
@@ -30,7 +33,7 @@ const [contact,setContact]=useState("")
             }
           }
             const { data }= await axios.post("http://localhost:8000/customers",
-            {name,email,password,contact},
+            {name,place,address,id,pro_id},
             config
           )
           
@@ -60,15 +63,35 @@ const [contact,setContact]=useState("")
         >
           <Form.Control type="name" placeholder="Enter full name" />
         </FloatingLabel>
+         
+        <FloatingLabel
+          controlId="inputAddress"
+          label="Address"
+          value={address}
+          className="mb-3"
+          onChange={(e)=>setAddress(e.target.value)}
+        >
+          <Form.Control type="address" placeholder="Enter address" />
+        </FloatingLabel>
 
         <FloatingLabel
-          controlId="inputEmail"
-          label="Email address"
-          value={email}
+          controlId="inputid"
+          label="id"
+          value={id}
           className="mb-3"
-          onChange={(e)=>setEmail(e.target.value)}
+          onChange={(e)=>setId(e.target.value)}
         >
-          <Form.Control type="email" placeholder="name@example.com" />
+          <Form.Control type="id" placeholder="Enter Id" />
+        </FloatingLabel>
+
+        <FloatingLabel
+          controlId="inputpro_id"
+          label="pro_id"
+          value={pro_id}
+          className="mb-3"
+          onChange={(e)=>setPro_id(e.target.value)}
+        >
+          <Form.Control type="pro_id" placeholder="Enter pro_id" />
         </FloatingLabel>
 
         <FloatingLabel
@@ -101,6 +124,21 @@ const [contact,setContact]=useState("")
           <Form.Control type="contact" placeholder="Enter Contact Number" />
         </FloatingLabel>
 
+        <FloatingLabel
+          controlId="inputSelect"
+          label="Select Place"
+          value={place}
+          className="mb-3"
+          onChange={(e)=>setPlace(e.target.value)}
+        >
+          <Form.Select type="place" aria-label="Select place">
+            <option value="Mumbai">Mumbai</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Pune">Pune</option>
+            <option value="Bangalore">Bangalore</option>
+            <option value="Hyderabad">Hyderabad</option>
+          </Form.Select>
+        </FloatingLabel>
         
         <br />
         <Button type="submit" variant="primary">

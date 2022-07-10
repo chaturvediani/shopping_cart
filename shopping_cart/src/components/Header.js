@@ -10,7 +10,6 @@ export default function Header() {
   const logoutHandler = () => {
     JSON.stringify(userInfo)
     localStorage.removeItem("userInfo")
-    localStorage.removeItem("Cart")
     navigate('/')
   };
   return (
@@ -41,7 +40,7 @@ export default function Header() {
               </NavDropdown>
             </>
         ) : (
-          <Nav.Link href="/login">Login</Nav.Link>
+          <Nav.Link href="/register">Register</Nav.Link>
         )}
         </Nav>
       </Navbar.Collapse>

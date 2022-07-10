@@ -25,22 +25,67 @@ app.get('/', (req, res) => {
   });
 });
 
-app.post('/customers',(req,res)=>{
-  let sql = `INSERT INTO customers (name,email,password,contact) VALUES (?,?,?,?);`;
-  let name=req.body.name;
-  let email=req.body.email;
-  let password=req.body.password;
-  let contact=req.body.contact;
-  data=[name,email,password,contact]
-  // let data = {name: req.body.name, email:req.body.email,password:req.body.password,contact:req.body.contact};
-  // console.log(data)
-  let q = connection.query(sql, data,(err, results) => {
+app.get('/customer', (req, res) => {
+  connection.query("SELECT * FROM customers;", (err, results, fields) => {
     if(err) throw err;
-    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+    res.send(results);
+  });
+});
+app.patch('/customer/:cust_id',(req,res)=>{
+  connection.query("UPDATE customers SET name=?, place=?,address=? WHERE cust_id=?",[req.body.name,req.body.place, req.body.address, req.params.cust_id], function (error, results, fields) {
+    if (error) throw error;
+    res.end(JSON.stringify(results));
   });
 })
 
 
+app.get('/order', (req, res) => {
+  connection.query("SELECT * FROM orders;", (err, results, fields) => {
+    if(err) throw err;
+    res.send(results);
+  });
+});
+app.patch('/order/:pro_id',(req,res)=>{
+  connection.query("UPDATE orders SET pro_name=?, quantity=?,amount=? WHERE pro_id=?",[req.body.pro_name,req.body.quantity, req.body.amount, req.params.pro_id], function (error, results, fields) {
+    if (error) throw error;
+    res.end(JSON.stringify(results));
+  });
+})
+
+
+
+
+app.post('/customers',(req,res)=>{
+  let sql = `INSERT INTO customers (cust_id,name,place,address) VALUES (?,?,?,?);`;
+  let cust_id=req.body.cust_id;
+  let name=req.body.name;
+  let place=req.body.place;
+  let address=req.body.address;
+  // let id=req.body.id;
+  // let pro_id=req.body.pro_id;
+  data=[cust_id,name,place,address]
+  let q = connection.query(sql, data,(err, results) => {
+    if(err) throw err;
+    res.send({cust_id:cust_id,name:name,place:place,address:address})
+    // res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+  });
+})
+
+app.post('/orders',(req,res)=>{
+  let sql = `INSERT INTO orders (pro_id,pro_name,cust_id,quantity,amount) VALUES (?,?,?,?,?);`;
+  let pro_id=req.body.pro_id;
+  let pro_name=req.body.pro_name;
+  let cust_id=req.body.cust_id;
+  let quantity=req.body.quantity;
+  let amount=req.body.amount;
+  // let id=req.body.id;
+  // let pro_id=req.body.pro_id;
+  data=[pro_id,pro_name,cust_id,quantity,amount]
+  let q = connection.query(sql, data,(err, results) => {
+    if(err) throw err;
+    res.send({pro_id:pro_id,pro_name:pro_name,cust_id:cust_id,quantity:quantity,amount:amount});
+  });
+})
 
 app.post('/login',(req,res)=>{
   let email = req.body.email;
@@ -71,23 +116,7 @@ app.post('/login',(req,res)=>{
 	}
 });
 
-const idgenerator=()=>{
-  
-}
-app.post('/checkout',(req,res)=>{
-  let sql = `INSERT INTO orders (id,proname,quantity,amount) VALUES (?,?,?,?);`;
-      let id=idgenerator();
-      let proname=req.body.proname;
-      let quantity=req.body.quantity;
-      let amount=req.body.amount;
-      data=[id,proname,quantity,amount]
-  // let data = {name: req.body.name, email:req.body.email,password:req.body.password,contact:req.body.contact};
-  // console.log(data)
-  let q = connection.query(sql, data,(err, results) => {
-    if(err) throw err;
-    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
-  });
-})
+
 
 app.listen(8000, (err) => {
   if (err) throw err;
